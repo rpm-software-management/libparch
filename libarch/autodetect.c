@@ -86,7 +86,7 @@ static inline void model3(__attribute__((unused)) int _unused)
 	siglongjmp(jenv, 1);
 }
 
-static inline int RPMClass(void)
+static inline int CPUClass(void)
 {
 	int cpu;
 	unsigned int tfms, junk, cap, capamd;
@@ -576,7 +576,7 @@ static void autodetect()
 
 #	if defined(__linux__) && defined(__i386__)
 	{
-	    char mclass = (char) (RPMClass() | '0');
+	    char mclass = (char) (CPUClass() | '0');
 
 	    if ((mclass == '6' && is_athlon()) || mclass == '7')
 	    	strcpy(un.machine, "athlon");
