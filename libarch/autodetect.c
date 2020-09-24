@@ -304,9 +304,11 @@ static void read_auxv(void)
 
 /**
  */
-const char * detectMachine() // const char ** arch, const char ** os)
+
+static struct utsname un;
+
+static void autodetect()
 {
-    static struct utsname un;
     char * chptr;
     //canonEntry canon;
     int rc;
@@ -319,8 +321,7 @@ const char * detectMachine() // const char ** arch, const char ** os)
     {
 	rc = uname(&un);
 	if (rc < 0) {
-	    strcpy(un.machine, "");
-	    return un.machine;
+	    strcpy(un.machine, ""); // XXX
 	}
 
 #if !defined(__linux__)
@@ -608,7 +609,17 @@ const char * detectMachine() // const char ** arch, const char ** os)
 	*/
     }
 
-    //if (arch) *arch = un.machine;
-    //if (os) *os = un.sysname;
+}
+
+const char * libarch_autodetect_arch()
+{
+    if (un.machine[0] == '\0')
+	autodetect();
     return un.machine;
+}
+const char * libarch_autodetect_os()
+{
+    if (un.machine[0] == '\0')
+	autodetect();
+    return un.sysname;
 }

@@ -37,6 +37,7 @@ class TestArch(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_autodetect(self):
-        arch = libarch.arch.detectMachine()
+        arch = libarch.arch.libarch_autodetect_arch()
+        os = libarch.arch.libarch_autodetect_os()
         self.assertEqual(arch, "x86_64")
         self.assertTrue(arch)
