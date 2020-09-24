@@ -46,5 +46,7 @@ int libarch_arch_is_noarch(libarch_arch arch);
 /// Determine if an Arch is source.
 int libarch_arch_is_source(libarch_arch arch);
 
+/// Detect arch and OS of the current machine
+const char * detectMachine();
 
 #endif  // LIBARCH_ARCH_H

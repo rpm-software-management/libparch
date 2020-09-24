@@ -35,3 +35,8 @@ class TestArch(unittest.TestCase):
         actual = libarch.arch.libarch_arch_get_compatible_multilib_arches(arch)
         expected = ("athlon", "i686", "i586", "i486", "i386")
         self.assertEqual(expected, actual)
+
+    def test_autodetect(self):
+        arch = libarch.arch.detectMachine()
+        self.assertEqual(arch, "x86_64")
+        self.assertTrue(arch)
