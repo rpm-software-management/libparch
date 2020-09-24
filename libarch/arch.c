@@ -291,6 +291,48 @@ static struct _Arch arch_list[] = {
 
 #define ARCH_LIST_LEN (sizeof(arch_list)/sizeof(*arch_list))
 
+typedef struct _Canon {
+    const char * name;
+    const char * canon_name;
+} _Canon;
+
+
+// needs to be in alphabetical order!
+static struct _Canon arch_canon_names[] = {
+    { .name = "atariclone", .canon_name = "m68kmint" },
+    { .name = "atarist", .canon_name = "m68kmint" },
+    { .name = "atariste", .canon_name = "m68kmint" },
+    { .name = "ataritt", .canon_name = "m68kmint" },
+    { .name = "falcon", .canon_name = "m68kmint" },
+    { .name = "hades", .canon_name = "m68kmint" },
+    { .name = "milan", .canon_name = "m68kmint" },
+    { .name = "riscv", .canon_name = "riscv64" },
+};
+
+#define CANON_ARCH_LIST_LEN (sizeof(arch_canon_names)/sizeof(*arch_canon_names))
+
+// needs to be in alphabetical order!
+static struct _Canon os_canon_names[] = {
+    { .name = "BSD_OS", .canon_name = "bsdi" },
+    { .name = "CYGWIN32_95", .canon_name = "cygwin32" },
+    { .name = "CYGWIN32_NT", .canon_name = "cygwin32" },
+    { .name = "Darwin", .canon_name = "darwin" },
+    { .name = "HP-UX", .canon_name = "hpux10" },
+    { .name = "IRIX64", .canon_name = "Irix64" },
+    { .name = "Linux/390", .canon_name = "OS/390" },
+    { .name = "Linux/ESA", .canon_name = "VM/ESA" },
+    { .name = "MacOSX", .canon_name = "macosx" },
+    { .name = "MiNT", .canon_name = "FreeMiNT" },
+    { .name = "NEXTSTEP", .canon_name = "NextStep" },
+    { .name = "OSF1", .canon_name = "osf1" },
+    { .name = "SCO_SV", .canon_name = "SCO_SV3.2v5.0.2" },
+    { .name = "UNIX_SV", .canon_name = "MP_RAS:" },
+    { .name = "osf3.2", .canon_name = "osf1" },
+    { .name = "osf4.0", .canon_name = "osf1" },
+};
+
+#define CANON_OS_LIST_LEN (sizeof(os_canon_names)/sizeof(*os_canon_names))
+
 
 libarch_arch libarch_get_arch(const char * name) {
     libarch_arch result = NULL;
@@ -399,4 +441,30 @@ char ** libarch_basearch_get_compatible_multilib_arches(const char * basearch) {
         }
     }
     return result;
+}
+
+int cmpentry(const char * name, const struct _Canon * entry){
+    return strcmp(name, entry->name);
+}
+
+const char * libarch_arch_get_canonical_name(const char * arch) {
+    struct _Canon * entry;
+    entry = bsearch(arch, arch_canon_names, CANON_ARCH_LIST_LEN,
+		    sizeof(struct _Canon),
+		    (int (*)(const void *, const void *))&cmpentry);
+    if (entry)
+	return entry->canon_name;
+    else
+	return arch;
+}
+
+const char * libarch_os_get_canonical_name(const char * os) {
+    struct _Canon * entry;
+    entry = bsearch(os, os_canon_names, CANON_OS_LIST_LEN,
+		    sizeof(struct _Canon),
+		    (int (*)(const void *, const void *))&cmpentry);
+    if (entry)
+	return entry->canon_name;
+    else
+	return os;
 }

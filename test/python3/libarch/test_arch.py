@@ -41,3 +41,13 @@ class TestArch(unittest.TestCase):
         os = libarch.arch.libarch_autodetect_os()
         self.assertEqual(arch, "x86_64")
         self.assertTrue(arch)
+
+    def test_canon(self):
+        arch = libarch.arch.libarch_arch_get_canonical_name("x86_64")
+        self.assertEqual(arch, "x86_64")
+        arch = libarch.arch.libarch_arch_get_canonical_name("riscv")
+        self.assertEqual(arch, "riscv64")
+        os = libarch.arch.libarch_os_get_canonical_name("BSD_OS")
+        self.assertEqual(os, "bsdi")
+        os = libarch.arch.libarch_os_get_canonical_name("NONEXISTANT")
+        self.assertEqual(os, "NONEXISTANT")

@@ -50,4 +50,10 @@ int libarch_arch_is_source(libarch_arch arch);
 const char * libarch_autodetect_arch();
 const char * libarch_autodetect_os();
 
+/// Get canonical names from (possibly more specific) name
+/// returned from libarch_autodetect_*
+const char * libarch_arch_get_canonical_name(const char * os);
+const char * libarch_os_get_canonical_name(const char * os);
+
+
 #endif  // LIBARCH_ARCH_H
