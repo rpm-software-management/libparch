@@ -243,18 +243,18 @@ static int is_geode(void)
 }
 #endif
 
-static struct rpmat_s {
+static struct atinfo_s {
     const char *platform;
     uint64_t hwcap;
     uint64_t hwcap2;
-} rpmat;
+} atinfo;
 
 #if defined(__linux__)
 #ifndef AT_HWCAP2 /* glibc < 2.18 */
 #define AT_HWCAP2 26
 #endif
 /**
- * Populate rpmat structure with auxv values
+ * Populate atinfo structure with auxv values
  */
 static void read_auxv(void)
 {
@@ -262,13 +262,13 @@ static void read_auxv(void)
 
     if (oneshot) {
 #ifdef HAVE_GETAUXVAL
-	rpmat.platform = (char *) getauxval(AT_PLATFORM);
-	if (!rpmat.platform)
-	    rpmat.platform = "";
-	rpmat.hwcap = getauxval(AT_HWCAP);
-	rpmat.hwcap2 = getauxval(AT_HWCAP2);
+	atinfo.platform = (char *) getauxval(AT_PLATFORM);
+	if (!atinfo.platform)
+	    atinfo.platform = "";
+	atinfo.hwcap = getauxval(AT_HWCAP);
+	atinfo.hwcap2 = getauxval(AT_HWCAP2);
 #else
-	rpmat.platform = "";
+	atinfo.platform = "";
 	int fd = open("/proc/self/auxv", O_RDONLY);
 
 	if (fd == -1) {
@@ -283,13 +283,13 @@ static void read_auxv(void)
                     case AT_NULL:
                         break;
                     case AT_PLATFORM:
-                        rpmat.platform = strdup((char *) auxv.a_un.a_val);
+                        atinfo.platform = strdup((char *) auxv.a_un.a_val);
                         break;
                     case AT_HWCAP:
-                        rpmat.hwcap = auxv.a_un.a_val;
+                        atinfo.hwcap = auxv.a_un.a_val;
                         break;
 		    case AT_HWCAP2:
-			rpmat.hwcap2 = auxv.a_un.a_val;
+			atinfo.hwcap2 = auxv.a_un.a_val;
 			break;
                 }
 	    }
@@ -314,7 +314,7 @@ static void autodetect()
     int rc;
 
 #if defined(__linux__)
-    /* Populate rpmat struct with hw info */
+    /* Populate atinfo struct with hw info */
     read_auxv();
 #endif
 
@@ -480,7 +480,7 @@ static void autodetect()
 	    }
 
 	    /* This is how glibc detects Niagara so... */
-	    if (rpmat.hwcap & HWCAP_SPARC_BLKINIT) {
+	    if (atinfo.hwcap & HWCAP_SPARC_BLKINIT) {
 		if (!strcmp(un.machine, "sparcv9") || !strcmp(un.machine, "sparc")) {
 		    strcpy(un.machine, "sparcv9v");
 		} else if (!strcmp(un.machine, "sparc64")) {
@@ -495,7 +495,7 @@ static void autodetect()
 	{
             int powerlvl;
             if (!!strcmp(un.machine, "ppc") &&
-		    sscanf(rpmat.platform, "power%d", &powerlvl) == 1 &&
+		    sscanf(atinfo.platform, "power%d", &powerlvl) == 1 &&
 		    powerlvl > 6) {
                 strcpy(un.machine, "ppc64p7");
 	    }
@@ -526,11 +526,11 @@ static void autodetect()
 		/* keep armv7, armv8, armv9, armv10, ... */
 		while(risdigit(*modifier)) 
 			modifier++;
-		if (rpmat.hwcap & HWCAP_ARM_VFPv3)
+		if (atinfo.hwcap & HWCAP_ARM_VFPv3)
 			*modifier++ = 'h';
-		if (rpmat.hwcap2 & HWCAP2_AES)
+		if (atinfo.hwcap2 & HWCAP2_AES)
 			*modifier++ = 'c';
-		if (rpmat.hwcap & HWCAP_ARM_NEON)
+		if (atinfo.hwcap & HWCAP_ARM_NEON)
 			*modifier++ = 'n';
 		*modifier++ = endian;
 		*modifier++ = 0;
