@@ -2,25 +2,25 @@
 #define LIBARCH_ARCH_H
 
 
-typedef struct _Arch * libarch_arch;
+typedef struct _Arch libarch_arch;
 
 
 /// Return pointer to Arch or NULL if not found.
 ///
 /// Data ownership: The data is static and MUST NOT be freed.
-libarch_arch libarch_get_arch(const char * name);
+const libarch_arch * libarch_get_arch(const char * name);
 
 
 /// Return name of an Arch.
 //
 /// Data ownership: The data is static and MUST NOT be freed.
-const char * libarch_arch_get_name(libarch_arch arch);
+const char * libarch_arch_get_name(const libarch_arch * arch);
 
 
 /// Return basearch of an Arch.
 //
 /// Data ownership: The data is static and MUST NOT be freed.
-const char * libarch_arch_get_basearch(libarch_arch arch);
+const char * libarch_arch_get_basearch(const libarch_arch * arch);
 
 
 /// Return number of bits of an Arch.
@@ -28,23 +28,23 @@ const char * libarch_arch_get_basearch(libarch_arch arch);
 /// If 0 is returned, then the architecture is either noarch or source.
 ///
 /// Data ownership: The data is static and MUST NOT be freed.
-int libarch_arch_get_bits(libarch_arch arch);
+int libarch_arch_get_bits(const libarch_arch * arch);
 
 
-const char ** libarch_arch_get_compatible_native_arches(libarch_arch arch);
-const char ** libarch_arch_get_compatible_multilib_arches(libarch_arch arch);
+const char *const * libarch_arch_get_compatible_native_arches(const libarch_arch * arch);
+const char * const * libarch_arch_get_compatible_multilib_arches(const libarch_arch * arch);
 
 
 /// Determine if an Arch is multilib.
-int libarch_arch_is_multilib(libarch_arch arch);
+int libarch_arch_is_multilib(const libarch_arch * arch);
 
 
 /// Determine if an Arch is noarch.
-int libarch_arch_is_noarch(libarch_arch arch);
+int libarch_arch_is_noarch(const libarch_arch * arch);
 
 
 /// Determine if an Arch is source.
-int libarch_arch_is_source(libarch_arch arch);
+int libarch_arch_is_source(const libarch_arch * arch);
 
 /// Detect arch and OS of the current machine
 const char * libarch_autodetect_arch();

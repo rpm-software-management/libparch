@@ -334,8 +334,8 @@ static struct _Canon os_canon_names[] = {
 #define CANON_OS_LIST_LEN (sizeof(os_canon_names)/sizeof(*os_canon_names))
 
 
-libarch_arch libarch_get_arch(const char * name) {
-    libarch_arch result = NULL;
+const libarch_arch * libarch_get_arch(const char * name) {
+    const libarch_arch * result = NULL;
     for (size_t i = 0; i < ARCH_LIST_LEN; i++) {
         if (strcmp(arch_list[i].name, name) == 0) {
             result = &arch_list[i];
@@ -346,42 +346,42 @@ libarch_arch libarch_get_arch(const char * name) {
 }
 
 
-const char * libarch_arch_get_name(libarch_arch arch) {
+const char * libarch_arch_get_name(const libarch_arch * arch) {
     return arch->name;
 }
 
 
-const char * libarch_arch_get_basearch(libarch_arch arch) {
+const char * libarch_arch_get_basearch(const libarch_arch * arch) {
     return arch->basearch;
 }
 
 
-int libarch_arch_get_bits(libarch_arch arch) {
+int libarch_arch_get_bits(const libarch_arch * arch) {
     return arch->bits;
 }
 
 
-const char ** libarch_arch_get_compatible_native_arches(libarch_arch arch) {
+const char * const * libarch_arch_get_compatible_native_arches(const libarch_arch * arch) {
     return arch->compatible_native_arches;
 }
 
 
-const char ** libarch_arch_get_compatible_multilib_arches(libarch_arch arch) {
+const char * const * libarch_arch_get_compatible_multilib_arches(const libarch_arch * arch) {
     return arch->compatible_multilib_arches;
 }
 
 
-int libarch_arch_is_multilib(libarch_arch arch) {
+int libarch_arch_is_multilib(const libarch_arch * arch) {
     return arch->is_multilib;
 }
 
 
-int libarch_arch_is_noarch(libarch_arch arch) {
+int libarch_arch_is_noarch(const libarch_arch * arch) {
     return arch->is_noarch;
 }
 
 
-int libarch_arch_is_source(libarch_arch arch) {
+int libarch_arch_is_source(const libarch_arch * arch) {
     return arch->is_source;
 }
 
@@ -394,7 +394,7 @@ char ** libarch_basearch_get_compatible_native_arches(const char * basearch) {
 
 
     for (size_t i = 0; i < ARCH_LIST_LEN; i++) {
-        libarch_arch arch = &arch_list[i];
+        const libarch_arch * arch = &arch_list[i];
         if (arch->name == NULL) {
             // ARCH_LIST_LEN is greater than actual array length
             break;
@@ -423,7 +423,7 @@ char ** libarch_basearch_get_compatible_multilib_arches(const char * basearch) {
 
 
     for (size_t i = 0; i < ARCH_LIST_LEN; i++) {
-        libarch_arch arch = &arch_list[i];
+        const libarch_arch * arch = &arch_list[i];
         if (arch->name == NULL) {
             // ARCH_LIST_LEN is greater than actual array length
             break;
