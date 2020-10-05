@@ -10,6 +10,13 @@
 #define MAX_ARCHES 10
 
 
+typedef struct _ArchInfo {
+    struct _Arch * arch_list;
+    struct _Arch * this_arch;
+    char * arch_name;
+    char * os_name;
+} _ArchInfo;
+
 typedef struct _Arch {
     const char * name;
     int bits;
@@ -334,11 +341,21 @@ static struct _Canon os_canon_names[] = {
 #define CANON_OS_LIST_LEN (sizeof(os_canon_names)/sizeof(*os_canon_names))
 
 
-const libarch_arch * libarch_get_arch(const char * name) {
+libarch_archinfo * libarch_init() {
+    libarch_archinfo * result = malloc(sizeof(libarch_archinfo));
+    result->arch_list = arch_list;
+    return result;
+}
+
+void libarch_free(libarch_archinfo * archinfo) {
+    free(archinfo);
+}
+
+const libarch_arch * libarch_get_arch(const libarch_archinfo * archinfo, const char * name) {
     const libarch_arch * result = NULL;
     for (size_t i = 0; i < ARCH_LIST_LEN; i++) {
-        if (strcmp(arch_list[i].name, name) == 0) {
-            result = &arch_list[i];
+        if (strcmp(archinfo->arch_list[i].name, name) == 0) {
+            result = &(archinfo->arch_list[i]);
             break;
         }
     }

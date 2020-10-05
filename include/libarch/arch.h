@@ -3,13 +3,21 @@
 
 
 typedef struct _Arch libarch_arch;
+typedef struct _ArchInfo libarch_archinfo;
 
+/// Return empty archinfo instance
+// libarch_archinfo * libarch_new();
+
+/// Return archinfo instance with the default information
+libarch_archinfo * libarch_init();
+
+/// Free archinfo
+void libarch_free(libarch_archinfo * archinfo);
 
 /// Return pointer to Arch or NULL if not found.
 ///
 /// Data ownership: The data is static and MUST NOT be freed.
-const libarch_arch * libarch_get_arch(const char * name);
-
+const libarch_arch * libarch_get_arch(const libarch_archinfo * archinfo, const char * name);
 
 /// Return name of an Arch.
 //
