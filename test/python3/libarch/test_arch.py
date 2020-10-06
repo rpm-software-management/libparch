@@ -40,9 +40,10 @@ class TestArch(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_autodetect(self):
-        arch = libarch.arch.libarch_autodetect_arch()
-        os = libarch.arch.libarch_autodetect_os()
-        self.assertEqual(arch, "x86_64")
+        arch_name = libarch.arch.libarch_detected_arch_name(self.archinfo)
+        arch = libarch.arch.libarch_detected_arch(self.archinfo)
+        os = libarch.arch.libarch_detected_os(self.archinfo)
+        self.assertEqual(arch_name, "x86_64")
         self.assertTrue(arch)
 
     def test_canon(self):

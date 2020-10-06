@@ -19,6 +19,19 @@ void libarch_free(libarch_archinfo * archinfo);
 /// Data ownership: The data is static and MUST NOT be freed.
 const libarch_arch * libarch_get_arch(const libarch_archinfo * archinfo, const char * name);
 
+/// Detect arch and OS of the current machine
+const libarch_arch * libarch_detected_arch(const libarch_archinfo * archinfo);
+const char * libarch_detected_arch_name(const libarch_archinfo * archinfo);
+const char * libarch_detected_os(const libarch_archinfo * archinfo);
+
+/// Get canonical names from (possibly more specific) name
+/// returned from libarch_autodetect_*
+const char * libarch_arch_get_canonical_name(const char * os);
+const char * libarch_os_get_canonical_name(const char * os);
+
+
+
+
 /// Return name of an Arch.
 //
 /// Data ownership: The data is static and MUST NOT be freed.
@@ -53,15 +66,5 @@ int libarch_arch_is_noarch(const libarch_arch * arch);
 
 /// Determine if an Arch is source.
 int libarch_arch_is_source(const libarch_arch * arch);
-
-/// Detect arch and OS of the current machine
-const char * libarch_autodetect_arch();
-const char * libarch_autodetect_os();
-
-/// Get canonical names from (possibly more specific) name
-/// returned from libarch_autodetect_*
-const char * libarch_arch_get_canonical_name(const char * os);
-const char * libarch_os_get_canonical_name(const char * os);
-
 
 #endif  // LIBARCH_ARCH_H

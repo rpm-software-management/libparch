@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
+#include <sys/utsname.h>
+
 
 #include "libarch/arch.h"
 
@@ -12,9 +14,8 @@
 
 typedef struct _ArchInfo {
     struct _Arch * arch_list;
-    struct _Arch * this_arch;
-    char * arch_name;
-    char * os_name;
+    char * detected_arch;
+    char * detected_os;
 } _ArchInfo;
 
 typedef struct _Arch {
@@ -340,14 +341,23 @@ static struct _Canon os_canon_names[] = {
 
 #define CANON_OS_LIST_LEN (sizeof(os_canon_names)/sizeof(*os_canon_names))
 
+// XXX
+void libarch_autodetect();
+extern struct utsname libarch_un;
 
 libarch_archinfo * libarch_init() {
     libarch_archinfo * result = malloc(sizeof(libarch_archinfo));
     result->arch_list = arch_list;
+    if (libarch_un.machine[0] == '\0')
+	libarch_autodetect();
+    result->detected_arch = strdup(libarch_un.machine);
+    result->detected_os = strdup(libarch_un.sysname);
     return result;
 }
 
 void libarch_free(libarch_archinfo * archinfo) {
+    free(archinfo->detected_arch);
+    free(archinfo->detected_os);
     free(archinfo);
 }
 
@@ -360,6 +370,18 @@ const libarch_arch * libarch_get_arch(const libarch_archinfo * archinfo, const c
         }
     }
     return result;
+}
+
+const libarch_arch * libarch_detected_arch(const libarch_archinfo * archinfo) {
+    return libarch_get_arch(archinfo, archinfo->detected_arch);
+}
+
+const char * libarch_detected_arch_name(const libarch_archinfo * archinfo) {
+    return archinfo->detected_arch;
+}
+
+const char * libarch_detected_os(const libarch_archinfo * archinfo) {
+    return archinfo->detected_os;
 }
 
 

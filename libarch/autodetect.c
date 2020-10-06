@@ -305,9 +305,9 @@ static void read_auxv(void)
 /**
  */
 
-static struct utsname un;
+struct utsname libarch_un;
 
-static void autodetect()
+void libarch_autodetect()
 {
     char * chptr;
     //canonEntry canon;
@@ -319,48 +319,48 @@ static void autodetect()
 #endif
 
     {
-	rc = uname(&un);
+	rc = uname(&libarch_un);
 	if (rc < 0) {
-	    strcpy(un.machine, ""); // XXX
+	    strcpy(libarch_un.machine, ""); // XXX
 	}
 
 #if !defined(__linux__)
-	if (!strcmp(un.sysname, "AIX")) {
-	    strcpy(un.machine, __power_pc() ? "ppc" : "rs6000");
-	    sprintf(un.sysname,"aix%s.%s", un.version, un.release);
+	if (!strcmp(libarch_un.sysname, "AIX")) {
+	    strcpy(libarch_un.machine, __power_pc() ? "ppc" : "rs6000");
+	    sprintf(libarch_un.sysname,"aix%s.%s", libarch_un.version, libarch_un.release);
 	}
-	else if (!strcmp(un.sysname, "Darwin")) { 
+	else if (!strcmp(libarch_un.sysname, "Darwin")) { 
 #if defined(__ppc__)
-	    strcpy(un.machine, "ppc");
+	    strcpy(libarch_un.machine, "ppc");
 #elif defined(__i386__)
-	    strcpy(un.machine, "i386");
+	    strcpy(libarch_un.machine, "i386");
 #elif defined(__x86_64__)
-	    strcpy(un.machine, "x86_64");
+	    strcpy(libarch_un.machine, "x86_64");
 #else
 	    #warning "No architecture defined! Automatic detection may not work!"
 #endif 
 	}
-	else if (!strcmp(un.sysname, "SunOS")) {
+	else if (!strcmp(libarch_un.sysname, "SunOS")) {
 	    /* Solaris 2.x: n.x.x becomes n-3.x.x */
-	    sprintf(un.sysname, "solaris%1d%s", atoi(un.release)-3,
-		    un.release+1+(atoi(un.release)/10));
+	    sprintf(libarch_un.sysname, "solaris%1d%s", atoi(libarch_un.release)-3,
+		    libarch_un.release+1+(atoi(libarch_un.release)/10));
 
 	    /* Solaris on Intel hardware reports i86pc instead of i386
 	     * (at least on 2.6 and 2.8)
 	     */
-	    if (!strcmp(un.machine, "i86pc"))
-		sprintf(un.machine, "i386");
+	    if (!strcmp(libarch_un.machine, "i86pc"))
+		sprintf(libarch_un.machine, "i386");
 	}
-	else if (!strcmp(un.sysname, "HP-UX"))
-	    /*make un.sysname look like hpux9.05 for example*/
-	    sprintf(un.sysname, "hpux%s", strpbrk(un.release, "123456789"));
-	else if (!strcmp(un.sysname, "OSF1"))
-	    /*make un.sysname look like osf3.2 for example*/
-	    sprintf(un.sysname, "osf%s", strpbrk(un.release, "123456789"));
+	else if (!strcmp(libarch_un.sysname, "HP-UX"))
+	    /*make libarch_un.sysname look like hpux9.05 for example*/
+	    sprintf(libarch_un.sysname, "hpux%s", strpbrk(libarch_un.release, "123456789"));
+	else if (!strcmp(libarch_un.sysname, "OSF1"))
+	    /*make libarch_un.sysname look like osf3.2 for example*/
+	    sprintf(libarch_un.sysname, "osf%s", strpbrk(libarch_un.release, "123456789"));
 #endif	/* __linux__ */
 
 	/* get rid of the hyphens in the sysname */
-	for (chptr = un.machine; *chptr != '\0'; chptr++)
+	for (chptr = libarch_un.machine; *chptr != '\0'; chptr++)
 	    if (*chptr == '/') *chptr = '-';
 
 #	if defined(__MIPSEL__) || defined(__MIPSEL) || defined(_MIPSEL)
@@ -369,19 +369,19 @@ static void autodetect()
 		    /* 64-bit */
 #			if !defined(__mips_isa_rev) || __mips_isa_rev < 6
 			    /* r1-r5 */
-			    strcpy(un.machine, "mips64el");
+			    strcpy(libarch_un.machine, "mips64el");
 #			else
 			    /* r6 */
-			    strcpy(un.machine, "mips64r6el");
+			    strcpy(libarch_un.machine, "mips64r6el");
 #			endif
 #		else
 		    /* 32-bit */
 #			if !defined(__mips_isa_rev) || __mips_isa_rev < 6
 			    /* r1-r5 */
-			    strcpy(un.machine, "mipsel");
+			    strcpy(libarch_un.machine, "mipsel");
 #			else
 			    /* r6 */
-			    strcpy(un.machine, "mipsr6el");
+			    strcpy(libarch_un.machine, "mipsr6el");
 #			endif
 #		endif
 #	elif defined(__MIPSEB__) || defined(__MIPSEB) || defined(_MIPSEB)
@@ -390,27 +390,27 @@ static void autodetect()
 		    /* 64-bit */
 #			if !defined(__mips_isa_rev) || __mips_isa_rev < 6
 			    /* r1-r5 */
-			    strcpy(un.machine, "mips64");
+			    strcpy(libarch_un.machine, "mips64");
 #			else
 			    /* r6 */
-			    strcpy(un.machine, "mips64r6");
+			    strcpy(libarch_un.machine, "mips64r6");
 #			endif
 #		else
 		    /* 32-bit */
 #			if !defined(__mips_isa_rev) || __mips_isa_rev < 6
 			    /* r1-r5 */
-			    strcpy(un.machine, "mips");
+			    strcpy(libarch_un.machine, "mips");
 #			else
 			    /* r6 */
-			    strcpy(un.machine, "mipsr6");
+			    strcpy(libarch_un.machine, "mipsr6");
 #			endif
 #		endif
 #	endif
 
 #if defined(__linux__)
 	/* in linux, lets rename parisc to hppa */
-	if (!strcmp(un.machine, "parisc"))
-	    strcpy(un.machine, "hppa");
+	if (!strcmp(libarch_un.machine, "parisc"))
+	    strcpy(libarch_un.machine, "hppa");
 #endif
 
 #	if defined(__hpux) && defined(_SC_CPU_VERSION)
@@ -425,32 +425,32 @@ static void autodetect()
 
 #	    if defined(CPU_HP_MC68020)
 		if (cpu_version == CPU_HP_MC68020)
-		    strcpy(un.machine, "m68k");
+		    strcpy(libarch_un.machine, "m68k");
 #	    endif
 #	    if defined(CPU_HP_MC68030)
 		if (cpu_version == CPU_HP_MC68030)
-		    strcpy(un.machine, "m68k");
+		    strcpy(libarch_un.machine, "m68k");
 #	    endif
 #	    if defined(CPU_HP_MC68040)
 		if (cpu_version == CPU_HP_MC68040)
-		    strcpy(un.machine, "m68k");
+		    strcpy(libarch_un.machine, "m68k");
 #	    endif
 
 #	    if defined(CPU_PA_RISC1_0)
 		if (cpu_version == CPU_PA_RISC1_0)
-		    strcpy(un.machine, "hppa1.0");
+		    strcpy(libarch_un.machine, "hppa1.0");
 #	    endif
 #	    if defined(CPU_PA_RISC1_1)
 		if (cpu_version == CPU_PA_RISC1_1)
-		    strcpy(un.machine, "hppa1.1");
+		    strcpy(libarch_un.machine, "hppa1.1");
 #	    endif
 #	    if defined(CPU_PA_RISC1_2)
 		if (cpu_version == CPU_PA_RISC1_2)
-		    strcpy(un.machine, "hppa1.2");
+		    strcpy(libarch_un.machine, "hppa1.2");
 #	    endif
 #	    if defined(CPU_PA_RISC2_0)
 		if (cpu_version == CPU_PA_RISC2_0)
-		    strcpy(un.machine, "hppa2.0");
+		    strcpy(libarch_un.machine, "hppa2.0");
 #	    endif
 	}
 #	endif	/* hpux */
@@ -459,7 +459,7 @@ static void autodetect()
 #	if !defined(HWCAP_SPARC_BLKINIT)
 #	    define HWCAP_SPARC_BLKINIT	0x00000040
 #	endif
-	if (!strcmp(un.machine, "sparc")) {
+	if (!strcmp(libarch_un.machine, "sparc")) {
 	    #define PERS_LINUX		0x00000000
 	    #define PERS_LINUX_32BIT	0x00800000
 	    #define PERS_LINUX32	0x00000008
@@ -470,9 +470,9 @@ static void autodetect()
 	    oldpers = personality(PERS_LINUX_32BIT);
 	    if (oldpers != -1) {
 		if (personality(PERS_LINUX) != -1) {
-		    uname(&un);
-		    if (!strcmp(un.machine, "sparc64")) {
-			strcpy(un.machine, "sparcv9");
+		    uname(&libarch_un);
+		    if (!strcmp(libarch_un.machine, "sparc64")) {
+			strcpy(libarch_un.machine, "sparcv9");
 			oldpers = PERS_LINUX32;
 		    }
 		}
@@ -481,10 +481,10 @@ static void autodetect()
 
 	    /* This is how glibc detects Niagara so... */
 	    if (atinfo.hwcap & HWCAP_SPARC_BLKINIT) {
-		if (!strcmp(un.machine, "sparcv9") || !strcmp(un.machine, "sparc")) {
-		    strcpy(un.machine, "sparcv9v");
-		} else if (!strcmp(un.machine, "sparc64")) {
-		    strcpy(un.machine, "sparc64v");
+		if (!strcmp(libarch_un.machine, "sparcv9") || !strcmp(libarch_un.machine, "sparc")) {
+		    strcpy(libarch_un.machine, "sparcv9v");
+		} else if (!strcmp(libarch_un.machine, "sparc64")) {
+		    strcpy(libarch_un.machine, "sparc64v");
 		}
 	    }
 	}
@@ -494,10 +494,10 @@ static void autodetect()
 #	if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
 	{
             int powerlvl;
-            if (!!strcmp(un.machine, "ppc") &&
+            if (!!strcmp(libarch_un.machine, "ppc") &&
 		    sscanf(atinfo.platform, "power%d", &powerlvl) == 1 &&
 		    powerlvl > 6) {
-                strcpy(un.machine, "ppc64p7");
+                strcpy(libarch_un.machine, "ppc64p7");
 	    }
         }
 #	endif	/* __ORDER_BIG_ENDIAN__ */
@@ -517,12 +517,12 @@ static void autodetect()
 #	    define HWCAP2_AES		(1 << 0)
 #	endif
 	/*
-	 * un.machine is armvXE, where X is version number and E is
+	 * libarch_un.machine is armvXE, where X is version number and E is
 	 * endianness (b or l)
 	 */
-	if (!strcmpn(un.machine, "armv", 4)) {
-		char endian = un.machine[strlen(un.machine)-1];
-		char *modifier = un.machine + 5;
+	if (!strcmpn(libarch_un.machine, "armv", 4)) {
+		char endian = libarch_un.machine[strlen(libarch_un.machine)-1];
+		char *modifier = libarch_un.machine + 5;
 		/* keep armv7, armv8, armv9, armv10, ... */
 		while(risdigit(*modifier)) 
 			modifier++;
@@ -538,13 +538,13 @@ static void autodetect()
 #	endif	/* arm*-linux */
 
 #	if defined(__linux__) && defined(__riscv__)
-	if (!strcmp(un.machine, "riscv")) {
+	if (!strcmp(libarch_un.machine, "riscv")) {
 		if (sizeof(long) == 4)
-			strcpy(un.machine, "riscv32");
+			strcpy(libarch_un.machine, "riscv32");
 		else if (sizeof(long) == 8)
-			strcpy(un.machine, "riscv64");
+			strcpy(libarch_un.machine, "riscv64");
 		else if (sizeof(long) == 16)
-			strcpy(un.machine, "riscv128");
+			strcpy(libarch_un.machine, "riscv128");
 	}
 #	endif	/* riscv */
 
@@ -559,15 +559,15 @@ static void autodetect()
 	    switch (implver) {
 	    case 1:
 	    	switch (amask) {
-	    	case 0: strcpy(un.machine, "alphaev5"); break;
-	    	case 1: strcpy(un.machine, "alphaev56"); break;
-	    	case 0x101: strcpy(un.machine, "alphapca56"); break;
+	    	case 0: strcpy(libarch_un.machine, "alphaev5"); break;
+	    	case 1: strcpy(libarch_un.machine, "alphaev56"); break;
+	    	case 0x101: strcpy(libarch_un.machine, "alphapca56"); break;
 	    	}
 	    	break;
 	    case 2:
 	    	switch (amask) {
-	    	case 0x303: strcpy(un.machine, "alphaev6"); break;
-	    	case 0x307: strcpy(un.machine, "alphaev67"); break;
+	    	case 0x303: strcpy(libarch_un.machine, "alphaev6"); break;
+	    	case 0x307: strcpy(libarch_un.machine, "alphaev67"); break;
 	    	}
 	    	break;
 	    }
@@ -579,47 +579,34 @@ static void autodetect()
 	    char mclass = (char) (CPUClass() | '0');
 
 	    if ((mclass == '6' && is_athlon()) || mclass == '7')
-	    	strcpy(un.machine, "athlon");
+	    	strcpy(libarch_un.machine, "athlon");
 	    else if (is_pentium4())
-		strcpy(un.machine, "pentium4");
+		strcpy(libarch_un.machine, "pentium4");
 	    else if (is_pentium3())
-		strcpy(un.machine, "pentium3");
+		strcpy(libarch_un.machine, "pentium3");
 	    else if (is_geode())
-		strcpy(un.machine, "geode");
-	    else if (strchr("3456", un.machine[1]) && un.machine[1] != mclass)
-		un.machine[1] = mclass;
+		strcpy(libarch_un.machine, "geode");
+	    else if (strchr("3456", libarch_un.machine[1]) && libarch_un.machine[1] != mclass)
+		libarch_un.machine[1] = mclass;
 	}
 #	endif
 
 	/* the uname() result goes through the arch_canon table */
 	/*
-	canon = lookupInCanonTable(un.machine,
+	canon = lookupInCanonTable(libarch_un.machine,
 			   ctx->tables[RPM_MACHTABLE_INSTARCH].canons,
 			   ctx->tables[RPM_MACHTABLE_INSTARCH].canonsLength);
 	if (canon)
-	    rstrlcpy(un.machine, canon->short_name, sizeof(un.machine));
+	    rstrlcpy(libarch_un.machine, canon->short_name, sizeof(libarch_un.machine));
 
-	canon = lookupInCanonTable(un.sysname,
+	canon = lookupInCanonTable(libarch_un.sysname,
 			   ctx->tables[RPM_MACHTABLE_INSTOS].canons,
 			   ctx->tables[RPM_MACHTABLE_INSTOS].canonsLength);
 	if (canon)
-	    rstrlcpy(un.sysname, canon->short_name, sizeof(un.sysname));
+	    rstrlcpy(libarch_un.sysname, canon->short_name, sizeof(libarch_un.sysname));
 	ctx->machDefaults = 1;
 	break;
 	*/
     }
 
-}
-
-const char * libarch_autodetect_arch()
-{
-    if (un.machine[0] == '\0')
-	autodetect();
-    return un.machine;
-}
-const char * libarch_autodetect_os()
-{
-    if (un.machine[0] == '\0')
-	autodetect();
-    return un.sysname;
 }
