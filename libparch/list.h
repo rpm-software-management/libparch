@@ -1,5 +1,5 @@
-#ifndef LIBARCH_LIST_H
-#define LIBARCH_LIST_H
+#ifndef LIBPARCH_LIST_H
+#define LIBPARCH_LIST_H
 
 
 /// Return index of a string in string array or -1 if not found
@@ -12,4 +12,4 @@ int list_length(char ** list);
 void list_append(char ** list, const char * str);
 
 
-#endif  // LIBARCH_LIST_H
+#endif  // LIBPARCH_LIST_H

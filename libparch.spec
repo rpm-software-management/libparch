@@ -1,9 +1,9 @@
-Name:           libarch
+Name:           libparch
 Version:        1.0.0
 Release:        1%{?dist}
 Summary:        Architecture detection and management library
 License:        MIT
-URL:            https://github.com/rpm-software-management/libarch
+URL:            https://github.com/rpm-software-management/libparch
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 
@@ -45,40 +45,40 @@ BuildRequires:  libubsan-static
 %endif
 
 
-# ========== libarch ==========
+# ========== libparch ==========
 
 %description
 Architecture detection and management library
 
 %files
-%{_libdir}/libarch.so.*
+%{_libdir}/libparch.so.*
 %license mit.txt
 
 
-# ========== libarch-devel ==========
+# ========== libparch-devel ==========
 
 %package devel
-Summary:        Development files for libarch
-Requires:       libarch%{?_isa} = %{version}-%{release}
+Summary:        Development files for libparch
+Requires:       libparch%{?_isa} = %{version}-%{release}
 
 %description devel
-Development files for libarch.
+Development files for libparch.
 
 %files devel
-%{_includedir}/libarch/
-%{_libdir}/libarch.so
-%{_libdir}/pkgconfig/libarch.pc
+%{_includedir}/libparch/
+%{_libdir}/libparch.so
+%{_libdir}/pkgconfig/libparch.pc
 %license COPYING.md
 %license mit.txt
 
 
-# ========== perl5-libarch ==========
+# ========== perl5-libparch ==========
 
 %if %{with perl5}
-%package -n perl5-libarch
-Summary:        Perl 5 for the libarch library.
-Provides:       perl(libarch) = %{version}-%{release}
-Requires:       libarch%{?_isa} = %{version}-%{release}
+%package -n perl5-libparch
+Summary:        Perl 5 for the libparch library.
+Provides:       perl(libparch) = %{version}-%{release}
+Requires:       libparch%{?_isa} = %{version}-%{release}
 BuildRequires:  perl-devel
 BuildRequires:  swig >= %{swig_version}
 %if %{with tests}
@@ -87,53 +87,53 @@ BuildRequires:  perl(Test::More)
 BuildRequires:  perl(warnings)
 %endif
 
-%description -n perl5-libarch
-Perl 5 bindings for the libarch library.
+%description -n perl5-libparch
+Perl 5 bindings for the libparch library.
 
-%files -n perl5-libarch
-%{perl_vendorarch}/libarch
-%{perl_vendorarch}/auto/libarch
+%files -n perl5-libparch
+%{perl_vendorarch}/libparch
+%{perl_vendorarch}/auto/libparch
 %license COPYING.md
 %license mit.txt
 %endif
 
 
-# ========== python3-libarch ==========
+# ========== python3-libparch ==========
 
 %if %{with python3}
-%package -n python3-libarch
-%{?python_provide:%python_provide python3-libarch}
-Summary:        Python 3 bindings for the libarch library.
-Requires:       libarch%{?_isa} = %{version}-%{release}
+%package -n python3-libparch
+%{?python_provide:%python_provide python3-libparch}
+Summary:        Python 3 bindings for the libparch library.
+Requires:       libparch%{?_isa} = %{version}-%{release}
 BuildRequires:  python3-devel
 BuildRequires:  swig >= %{swig_version}
 
-%description -n python3-libarch
-Python 3 bindings for the libarch library.
+%description -n python3-libparch
+Python 3 bindings for the libparch library.
 
-%files -n python3-libarch
-%{python3_sitearch}/libarch/
+%files -n python3-libparch
+%{python3_sitearch}/libparch/
 %license COPYING.md
 %license mit.txt
 %endif
 
 
-# ========== ruby-libarch ==========
+# ========== ruby-libparch ==========
 
 %if %{with ruby}
-%package -n ruby-libarch
-Summary:        Ruby bindings for the libarch library.
-Provides:       ruby(libarch) = %{version}-%{release}
-Requires:       libarch%{?_isa} = %{version}-%{release}
+%package -n ruby-libparch
+Summary:        Ruby bindings for the libparch library.
+Provides:       ruby(libparch) = %{version}-%{release}
+Requires:       libparch%{?_isa} = %{version}-%{release}
 Requires:       ruby(release)
 BuildRequires:  pkgconfig(ruby)
 BuildRequires:  swig >= %{swig_version}
 
-%description -n ruby-libarch
-Ruby bindings for the libarch library.
+%description -n ruby-libparch
+Ruby bindings for the libparch library.
 
-%files -n ruby-libarch
-%{ruby_vendorarchdir}/libarch/
+%files -n ruby-libparch
+%{ruby_vendorarchdir}/libparch/
 %license COPYING.md
 %license mit.txt
 %endif

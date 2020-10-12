@@ -1,9 +1,9 @@
-message("Running CMake on libarch...")
+message("Running CMake on libparch...")
 cmake_minimum_required(VERSION 3.5)
 
 
 include(VERSION.cmake)
-project(libarch LANGUAGES C VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH})
+project(libparch LANGUAGES C VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH})
 cmake_policy(VERSION ${CMAKE_VERSION})
 
 
@@ -83,7 +83,7 @@ include_directories("${PROJECT_SOURCE_DIR}")
 
 
 add_subdirectory("include")
-add_subdirectory("libarch")
+add_subdirectory("libparch")
 add_subdirectory("doc")
 add_subdirectory("bindings")
 

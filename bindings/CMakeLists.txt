@@ -35,9 +35,9 @@ set(SWIG_COMPILE_OPTIONS
 )
 
 
-# list of all modules that will be included in libarch bindings
-list(APPEND SWIG_LIBARCH_MODULES arch)
-list(APPEND SWIG_LIBARCH_MODULES basearch)
+# list of all modules that will be included in libparch bindings
+list(APPEND SWIG_LIBPARCH_MODULES arch)
+list(APPEND SWIG_LIBPARCH_MODULES basearch)
 
 
 add_subdirectory(go)

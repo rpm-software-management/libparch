@@ -6,9 +6,9 @@
 
 %{
     // make SWIG wrap following headers
-    #include "libarch/arch.h"
+    #include "libparch/arch.h"
 %}
 
 
 #define CV __perl_CV
-%include "libarch/arch.h"
+%include "libparch/arch.h"

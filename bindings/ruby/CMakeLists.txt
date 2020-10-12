@@ -27,4 +27,4 @@ function(add_ruby_module LIBRARY_NAME MODULE_NAME)
 endfunction()
 
 
-add_subdirectory(libarch)
+add_subdirectory(libparch)

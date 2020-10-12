@@ -1,1 +1,1 @@
-add_subdirectory("libarch")
+add_subdirectory("libparch")

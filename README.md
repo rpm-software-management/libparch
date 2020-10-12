@@ -1,22 +1,22 @@
-libarch
+libparch
 =======
 
-* Libarch is a library for detecting architectures for package managers and managing relations among them.
+* Libparch is a library for detecting architectures for package managers and managing relations among them.
 * It was originally written for [libdnf](https://github.com/rpm-software-management/libdnf).
 
 
 Documentation
 =============
 
-* For HTML documentation see https://libarch.readthedocs.io/
+* For HTML documentation see https://libparch.readthedocs.io/
 * The header files are documented because documentation is mainly generated from them
 
 
 Reporting issues
 ================
 
-* [Red Hat Bugzilla](https://bugzilla.redhat.com/enter_bug.cgi?product=Fedora&component=libarch) is the preferred way of filing issues. [[backlog](https://bugzilla.redhat.com/buglist.cgi?bug_status=__open__&product=Fedora&component=libarch)]
-* [GitHub issues](https://github.com/rpm-software-management/libarch/issues/new) are also accepted. [[backlog](https://github.com/rpm-software-management/libarch/issues)]
+* [Red Hat Bugzilla](https://bugzilla.redhat.com/enter_bug.cgi?product=Fedora&component=libparch) is the preferred way of filing issues. [[backlog](https://bugzilla.redhat.com/buglist.cgi?bug_status=__open__&product=Fedora&component=libparch)]
+* [GitHub issues](https://github.com/rpm-software-management/libparch/issues/new) are also accepted. [[backlog](https://github.com/rpm-software-management/libparch/issues)]
 
 
 Contributing
@@ -41,7 +41,7 @@ Building
 --------
 To install build requirements, run::
 
-    $ dnf builddep libarch.spec --define '_with_sanitizers 1' [--define '_without_<option> 1 ...]
+    $ dnf builddep libparch.spec --define '_with_sanitizers 1' [--define '_without_<option> 1 ...]
 
 To build code, run::
 
@@ -52,8 +52,8 @@ To build code, run::
 
 To build rpms from git, run::
 
-    $ export PREFIX=$(rpmspec libarch.spec -q --srpm --qf '%{name}-%{version}'); git archive --format=tar.gz --prefix=$PREFIX/ HEAD > $PREFIX.tar.gz
-    $ rpmbuild -ba --define "_sourcedir $(pwd)" libarch.spec [--with=<option>|--without=<option> ...]
+    $ export PREFIX=$(rpmspec libparch.spec -q --srpm --qf '%{name}-%{version}'); git archive --format=tar.gz --prefix=$PREFIX/ HEAD > $PREFIX.tar.gz
+    $ rpmbuild -ba --define "_sourcedir $(pwd)" libparch.spec [--with=<option>|--without=<option> ...]
 
 
 Testing

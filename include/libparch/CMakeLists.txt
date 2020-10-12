@@ -1,0 +1,2 @@
+file(GLOB_RECURSE LIBPARCH_HEADERS *.h)
+install(FILES ${LIBPARCH_HEADERS} DESTINATION include/libparch)

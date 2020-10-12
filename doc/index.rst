@@ -1,4 +1,4 @@
-Welcome to libarch's documentation!
+Welcome to libparch's documentation!
 ==================================
 
 .. toctree::

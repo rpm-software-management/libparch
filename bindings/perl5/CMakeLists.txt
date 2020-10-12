@@ -61,4 +61,4 @@ function(add_perl5_module LIBRARY_NAME MODULE_NAME)
 endfunction()
 
 
-add_subdirectory(libarch)
+add_subdirectory(libparch)

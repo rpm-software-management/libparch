@@ -6,9 +6,9 @@
 
 %{
     // make SWIG wrap following headers
-    #include "libarch/basearch.h"
+    #include "libparch/basearch.h"
 %}
 
 
 #define CV __perl_CV
-%include "libarch/basearch.h"
+%include "libparch/basearch.h"

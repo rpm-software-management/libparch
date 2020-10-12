@@ -3,7 +3,7 @@
 #include <sys/utsname.h>
 
 
-#include "libarch/arch.h"
+#include "libparch/arch.h"
 
 #include "list.h"
 
@@ -342,27 +342,27 @@ static struct _Canon os_canon_names[] = {
 #define CANON_OS_LIST_LEN (sizeof(os_canon_names)/sizeof(*os_canon_names))
 
 // XXX
-void libarch_autodetect();
-extern struct utsname libarch_un;
+void libparch_autodetect();
+extern struct utsname libparch_un;
 
-libarch_archinfo * libarch_init() {
-    libarch_archinfo * result = malloc(sizeof(libarch_archinfo));
+libparch_archinfo * libparch_init() {
+    libparch_archinfo * result = malloc(sizeof(libparch_archinfo));
     result->arch_list = arch_list;
-    if (libarch_un.machine[0] == '\0')
-	libarch_autodetect();
-    result->detected_arch = strdup(libarch_un.machine);
-    result->detected_os = strdup(libarch_un.sysname);
+    if (libparch_un.machine[0] == '\0')
+	libparch_autodetect();
+    result->detected_arch = strdup(libparch_un.machine);
+    result->detected_os = strdup(libparch_un.sysname);
     return result;
 }
 
-void libarch_free(libarch_archinfo * archinfo) {
+void libparch_free(libparch_archinfo * archinfo) {
     free(archinfo->detected_arch);
     free(archinfo->detected_os);
     free(archinfo);
 }
 
-const libarch_arch * libarch_get_arch(const libarch_archinfo * archinfo, const char * name) {
-    const libarch_arch * result = NULL;
+const libparch_arch * libparch_get_arch(const libparch_archinfo * archinfo, const char * name) {
+    const libparch_arch * result = NULL;
     for (size_t i = 0; i < ARCH_LIST_LEN; i++) {
         if (strcmp(archinfo->arch_list[i].name, name) == 0) {
             result = &(archinfo->arch_list[i]);
@@ -372,60 +372,60 @@ const libarch_arch * libarch_get_arch(const libarch_archinfo * archinfo, const c
     return result;
 }
 
-const libarch_arch * libarch_detected_arch(const libarch_archinfo * archinfo) {
-    return libarch_get_arch(archinfo, archinfo->detected_arch);
+const libparch_arch * libparch_detected_arch(const libparch_archinfo * archinfo) {
+    return libparch_get_arch(archinfo, archinfo->detected_arch);
 }
 
-const char * libarch_detected_arch_name(const libarch_archinfo * archinfo) {
+const char * libparch_detected_arch_name(const libparch_archinfo * archinfo) {
     return archinfo->detected_arch;
 }
 
-const char * libarch_detected_os(const libarch_archinfo * archinfo) {
+const char * libparch_detected_os(const libparch_archinfo * archinfo) {
     return archinfo->detected_os;
 }
 
 
-const char * libarch_arch_get_name(const libarch_arch * arch) {
+const char * libparch_arch_get_name(const libparch_arch * arch) {
     return arch->name;
 }
 
 
-const char * libarch_arch_get_basearch(const libarch_arch * arch) {
+const char * libparch_arch_get_basearch(const libparch_arch * arch) {
     return arch->basearch;
 }
 
 
-int libarch_arch_get_bits(const libarch_arch * arch) {
+int libparch_arch_get_bits(const libparch_arch * arch) {
     return arch->bits;
 }
 
 
-const char * const * libarch_arch_get_compatible_native_arches(const libarch_arch * arch) {
+const char * const * libparch_arch_get_compatible_native_arches(const libparch_arch * arch) {
     return arch->compatible_native_arches;
 }
 
 
-const char * const * libarch_arch_get_compatible_multilib_arches(const libarch_arch * arch) {
+const char * const * libparch_arch_get_compatible_multilib_arches(const libparch_arch * arch) {
     return arch->compatible_multilib_arches;
 }
 
 
-int libarch_arch_is_multilib(const libarch_arch * arch) {
+int libparch_arch_is_multilib(const libparch_arch * arch) {
     return arch->is_multilib;
 }
 
 
-int libarch_arch_is_noarch(const libarch_arch * arch) {
+int libparch_arch_is_noarch(const libparch_arch * arch) {
     return arch->is_noarch;
 }
 
 
-int libarch_arch_is_source(const libarch_arch * arch) {
+int libparch_arch_is_source(const libparch_arch * arch) {
     return arch->is_source;
 }
 
 
-char ** libarch_basearch_get_compatible_native_arches(const char * basearch) {
+char ** libparch_basearch_get_compatible_native_arches(const char * basearch) {
     // arch_list is a superset of all architectures,
     // allocating by it's length + 1 for the NULL terminator should be sufficient
     char ** result = malloc((ARCH_LIST_LEN + 1) * sizeof(char *));
@@ -433,7 +433,7 @@ char ** libarch_basearch_get_compatible_native_arches(const char * basearch) {
 
 
     for (size_t i = 0; i < ARCH_LIST_LEN; i++) {
-        const libarch_arch * arch = &arch_list[i];
+        const libparch_arch * arch = &arch_list[i];
         if (arch->name == NULL) {
             // ARCH_LIST_LEN is greater than actual array length
             break;
@@ -454,7 +454,7 @@ char ** libarch_basearch_get_compatible_native_arches(const char * basearch) {
 }
 
 
-char ** libarch_basearch_get_compatible_multilib_arches(const char * basearch) {
+char ** libparch_basearch_get_compatible_multilib_arches(const char * basearch) {
     // arch_list is a superset of all architectures,
     // allocating by it's length + 1 for the NULL terminator should be sufficient
     char ** result = malloc((ARCH_LIST_LEN + 1) * sizeof(char *));
@@ -462,7 +462,7 @@ char ** libarch_basearch_get_compatible_multilib_arches(const char * basearch) {
 
 
     for (size_t i = 0; i < ARCH_LIST_LEN; i++) {
-        const libarch_arch * arch = &arch_list[i];
+        const libparch_arch * arch = &arch_list[i];
         if (arch->name == NULL) {
             // ARCH_LIST_LEN is greater than actual array length
             break;
@@ -486,7 +486,7 @@ int cmpentry(const char * name, const struct _Canon * entry){
     return strcmp(name, entry->name);
 }
 
-const char * libarch_arch_get_canonical_name(const char * arch) {
+const char * libparch_arch_get_canonical_name(const char * arch) {
     struct _Canon * entry;
     entry = bsearch(arch, arch_canon_names, CANON_ARCH_LIST_LEN,
 		    sizeof(struct _Canon),
@@ -497,7 +497,7 @@ const char * libarch_arch_get_canonical_name(const char * arch) {
 	return arch;
 }
 
-const char * libarch_os_get_canonical_name(const char * os) {
+const char * libparch_os_get_canonical_name(const char * os) {
     struct _Canon * entry;
     entry = bsearch(os, os_canon_names, CANON_OS_LIST_LEN,
 		    sizeof(struct _Canon),

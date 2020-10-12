@@ -6,8 +6,8 @@ endif()
 message("Building tests")
 
 
-# libarch
-#add_subdirectory(libarch)
+# libparch
+#add_subdirectory(libparch)
 
 # bindings
 #add_subdirectory(go)

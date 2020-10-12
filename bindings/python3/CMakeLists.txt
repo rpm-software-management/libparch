@@ -27,4 +27,4 @@ function(add_python3_module LIBRARY_NAME MODULE_NAME)
 endfunction()
 
 
-add_subdirectory(libarch)
+add_subdirectory(libparch)
