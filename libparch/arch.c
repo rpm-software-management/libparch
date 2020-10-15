@@ -12,13 +12,13 @@
 #define MAX_ARCHES 10
 
 
-typedef struct _ArchInfo {
-    struct _Arch * arch_list;
+struct libparch_archinfo {
+    struct libparch_arch * arch_list;
     char * detected_arch;
     char * detected_os;
-} _ArchInfo;
+};
 
-typedef struct _Arch {
+struct libparch_arch {
     const char * name;
     int bits;
     const char * basearch;
@@ -27,10 +27,10 @@ typedef struct _Arch {
     int is_multilib;
     int is_noarch;
     int is_source;
-} _Arch;
+};
 
 
-static struct _Arch arch_list[] = {
+static struct libparch_arch arch_list[] = {
     // basearch: aarch64
     {
         .name = "aarch64",
@@ -345,8 +345,8 @@ static struct _Canon os_canon_names[] = {
 void libparch_autodetect();
 extern struct utsname libparch_un;
 
-libparch_archinfo * libparch_init() {
-    libparch_archinfo * result = malloc(sizeof(libparch_archinfo));
+struct libparch_archinfo * libparch_init() {
+    struct libparch_archinfo * result = malloc(sizeof(struct libparch_archinfo));
     result->arch_list = arch_list;
     if (libparch_un.machine[0] == '\0')
 	libparch_autodetect();
@@ -355,14 +355,14 @@ libparch_archinfo * libparch_init() {
     return result;
 }
 
-void libparch_free(libparch_archinfo * archinfo) {
+void libparch_free(struct libparch_archinfo * archinfo) {
     free(archinfo->detected_arch);
     free(archinfo->detected_os);
     free(archinfo);
 }
 
-const libparch_arch * libparch_get_arch(const libparch_archinfo * archinfo, const char * name) {
-    const libparch_arch * result = NULL;
+const struct libparch_arch * libparch_get_arch(const struct libparch_archinfo * archinfo, const char * name) {
+    const struct libparch_arch * result = NULL;
     for (size_t i = 0; i < ARCH_LIST_LEN; i++) {
         if (strcmp(archinfo->arch_list[i].name, name) == 0) {
             result = &(archinfo->arch_list[i]);
@@ -372,55 +372,55 @@ const libparch_arch * libparch_get_arch(const libparch_archinfo * archinfo, cons
     return result;
 }
 
-const libparch_arch * libparch_detected_arch(const libparch_archinfo * archinfo) {
+const struct libparch_arch * libparch_detected_arch(const struct libparch_archinfo * archinfo) {
     return libparch_get_arch(archinfo, archinfo->detected_arch);
 }
 
-const char * libparch_detected_arch_name(const libparch_archinfo * archinfo) {
+const char * libparch_detected_arch_name(const struct libparch_archinfo * archinfo) {
     return archinfo->detected_arch;
 }
 
-const char * libparch_detected_os(const libparch_archinfo * archinfo) {
+const char * libparch_detected_os(const struct libparch_archinfo * archinfo) {
     return archinfo->detected_os;
 }
 
 
-const char * libparch_arch_get_name(const libparch_arch * arch) {
+const char * libparch_arch_get_name(const struct libparch_arch * arch) {
     return arch->name;
 }
 
 
-const char * libparch_arch_get_basearch(const libparch_arch * arch) {
+const char * libparch_arch_get_basearch(const struct libparch_arch * arch) {
     return arch->basearch;
 }
 
 
-int libparch_arch_get_bits(const libparch_arch * arch) {
+int libparch_arch_get_bits(const struct libparch_arch * arch) {
     return arch->bits;
 }
 
 
-const char * const * libparch_arch_get_compatible_native_arches(const libparch_arch * arch) {
+const char * const * libparch_arch_get_compatible_native_arches(const struct libparch_arch * arch) {
     return arch->compatible_native_arches;
 }
 
 
-const char * const * libparch_arch_get_compatible_multilib_arches(const libparch_arch * arch) {
+const char * const * libparch_arch_get_compatible_multilib_arches(const struct libparch_arch * arch) {
     return arch->compatible_multilib_arches;
 }
 
 
-int libparch_arch_is_multilib(const libparch_arch * arch) {
+int libparch_arch_is_multilib(const struct libparch_arch * arch) {
     return arch->is_multilib;
 }
 
 
-int libparch_arch_is_noarch(const libparch_arch * arch) {
+int libparch_arch_is_noarch(const struct libparch_arch * arch) {
     return arch->is_noarch;
 }
 
 
-int libparch_arch_is_source(const libparch_arch * arch) {
+int libparch_arch_is_source(const struct libparch_arch * arch) {
     return arch->is_source;
 }
 
@@ -433,7 +433,7 @@ char ** libparch_basearch_get_compatible_native_arches(const char * basearch) {
 
 
     for (size_t i = 0; i < ARCH_LIST_LEN; i++) {
-        const libparch_arch * arch = &arch_list[i];
+        const struct libparch_arch * arch = &arch_list[i];
         if (arch->name == NULL) {
             // ARCH_LIST_LEN is greater than actual array length
             break;
@@ -462,7 +462,7 @@ char ** libparch_basearch_get_compatible_multilib_arches(const char * basearch) 
 
 
     for (size_t i = 0; i < ARCH_LIST_LEN; i++) {
-        const libparch_arch * arch = &arch_list[i];
+        const struct libparch_arch * arch = &arch_list[i];
         if (arch->name == NULL) {
             // ARCH_LIST_LEN is greater than actual array length
             break;
